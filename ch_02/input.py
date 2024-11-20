@@ -6,7 +6,7 @@ num1AndNum2Input = input("숫자1, 숫자2: ").replace(",", "").split(" ")
 num1AndNum2 = list(map(int, num1AndNum2Input))
 print(num1AndNum2)
 
-# 구조분해할당 
+# 구조분해할당 (비구조할당)
 num1, num2 = num1AndNum2
 print(num1)
 print(num2)

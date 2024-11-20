@@ -28,3 +28,7 @@ def add(n1, n2, n3):
   # return [n1 + n2, n2 + n3, n1 + n3] 
 
 print(add(10, 20, 30))
+
+
+numbers = [1, 2, 3]
+a, b, c = numbers
