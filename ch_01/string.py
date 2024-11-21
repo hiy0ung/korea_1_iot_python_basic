@@ -36,8 +36,7 @@ print("  이름  ".rstrip())
 print("010-1234/5678".replace("-", "").replace("/", ""))
 
 #? 토큰으로 문자열을 리스트화 하기
-print("선하영, 선하영1, 선하영2".split(","))
-
+print("선하영, 선하영1, 선하영2".split(", "))
 
 address = "부산광역시 동래구 사직동 롯데캐슬 101동 101호"
 addressList = address.split(' ')

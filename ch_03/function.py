@@ -14,6 +14,7 @@ class A:
 # 파이썬, 자바스크립트는 인터프리터 언어이기 때문에 오버로딩 X > 한 줄씩 읽어서 내려오기 때문에
 # 오버로딩이 하고 싶으면 상황을 나누어 주어야 함
 # 매개변수에 default값을 넣어서 처리 가능
+# null 대신 None 사용
 
 # b:A | None=A() >> b에 A라는 객체가 들어오거나, 없으면 A() 객체 생성
 def fx03(a:int, b:A | None=A(), c=None):
@@ -44,7 +45,7 @@ def requestGet(
 responseDate = requestGet("http://localhost", None, {"name": "선하영", "age": 27})
 # responseDate = requestGet(url="http://localhost", params={"name": "선하영", "age": 31})
 
-# 람다는 : 뒤에 하위로 정의하지 X >> 간단한 수식을 사용할 때 사용!
+# 람다는 : 뒤에 하위(줄바꿈)로 정의하지 X >> 간단한 수식을 사용할 때 사용!
 # 람다는 타입 지정이 안 됨 >> :으로 지정하면 lambda의 끝으로 인식
 req = lambda url="http://localhost", port=8080, params=dict(): {"url": url, "port": port, "params": params}
 print(req("http://localhost", 8080, {"name": "선하영", "age": 27}))
