@@ -7,6 +7,9 @@ from selenium.webdriver.common.by import By
 from unicodedata import category
 from webdriver_manager.chrome import ChromeDriverManager
 
+from src.repository.coupang_repository import saveCoupangData
+
+
 def run():
     # 해당 dict 형태로 받아서 DB에 저장해야함
     coupangData = [
@@ -63,4 +66,4 @@ def run():
         coupangData.append(categoryAndProducts)
         driver.close()
 
-    print(coupangData)
+    saveCoupangData(coupangData)
