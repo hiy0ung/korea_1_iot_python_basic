@@ -89,7 +89,7 @@ def run4():
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.get("https://kr.stussy.com/collections/new-arrivals")
-    # 반응형 웹페이지라 적용
+    # 반응형 웹 페이지라 적용
     driver.maximize_window()
     sleep(1)
 
