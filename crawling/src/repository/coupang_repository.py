@@ -15,14 +15,15 @@ def saveCoupangData(coupangData: list):
                 # SQL에서 짜는 형태에 맞춰서 쿼리문 만들어 줘야 함
                 # 제일 처음과 끝 빼고 ","로 다 나눠져있음
                 # \ 이스케이프문 >> 문자열로 만들기 위해? 문자열에 ''를 썼는데 안에 또 ''를 쓰고 있어서 구분 해주기 위해 (int 타입인 price는 안 써도 됨)
-                # values = ",\n".join(list(map(lambda product: f"(default, \'{product['productName']}\', {product['price'].replace(',', '')}, \'{product['productImgUrl']}\', '{category_id}')", data['products'])))
-                values = ",\n".join(list(map(lambda product: "(default, %s, %s, %s, %s)", data['products'])))
+                values = ",\n".join(list(map(lambda product: f"(default, \'{product['productName']}\', {product['price'].replace(',', '')}, \'{product['productImgUrl']}\', '{category_id}')", data['products'])))
                 sql = "insert into product_tb values" + values
-                valueDatas = []
-                for value in list(map(lambda product: [product["productName"], product["price"], product["productImgUrl"], category_id], data["products"])):
-                    # 리스트들끼리 합쳐줌 (확장해줌)
-                    valueDatas.extend(value)
-                cursor.execute(sql, value)
+                cursor.execute(sql)
+                # values = ",\n".join(list(map(lambda product: "(default, %s, %s, %s, %s)", data['products'])))
+                # valueDatas = []
+                # for value in list(map(lambda product: [product["productName"], product["price"], product["productImgUrl"], category_id], data["products"])):
+                #     # 리스트들끼리 합쳐줌 (확장해줌)
+                #     valueDatas.extend(value)
+                # cursor.execute(sql, value)
             connection.commit()
 
         except Exception as e:

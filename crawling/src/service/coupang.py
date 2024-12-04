@@ -4,7 +4,6 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from unicodedata import category
 from webdriver_manager.chrome import ChromeDriverManager
 
 from src.repository.coupang_repository import saveCoupangData
@@ -14,14 +13,12 @@ def run():
     # 해당 dict 형태로 받아서 DB에 저장해야함
     coupangData = [
         {
-            "productName": "상품1",
-            "price": 10000,
-            "productImgUrl": "https://~~~~"
-        },
-        {
-            "productName": "상품2",
-            "price": 20000,
-            "productImgUrl": "https://~~~~"
+            "category": "카테고리1",
+            "products": [{
+                "productName": "상품1",
+                "price": 10000,
+                "productImgUrl": "https://~~~~"
+                }]
         }
     ]
     coupangData.clear()
@@ -45,6 +42,7 @@ def run():
         driver.get(f"https://www.coupang.com/np/categories/{categoryCode}")
         driver.maximize_window()
         sleep(1)
+        # 카테고리 이름
         category = driver.find_element(by=By.CSS_SELECTOR, value='#searchOptionForm > div > div > div.newcx-main > h1').text
         categoryAndProducts = {
             "category": category,
@@ -57,6 +55,7 @@ def run():
             productName = dl.find_element(by=By.CSS_SELECTOR, value="dd > div:nth-of-type(2)").text
             price = dl.find_element(by=By.CSS_SELECTOR, value="dd > div:nth-of-type(3) .price-value").text
             productImgUrl = dl.find_element(by=By.CSS_SELECTOR, value="dt > img").get_attribute("src")
+            # products에 들어갈 것들
             newProduct = {
                 "productName": productName,
                 "price": price,

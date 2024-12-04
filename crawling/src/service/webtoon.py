@@ -6,6 +6,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
+from src.repository.webtoon_repository import saveWebtoonDataList, save, saveAuthor
+
 def run():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
@@ -140,3 +142,96 @@ def run4():
         productList.append(categoryDict)
     with open("products.json", "w", encoding="utf-8") as f:
         json.dump(productList, f, ensure_ascii=False, indent=4)
+
+
+def run5():
+    # webtoonDataList 형태로 만들기
+    webtoonDataList = [
+        {
+            "categoryName": "월",
+            "webtoons": [
+                {
+                    "title": "참교육",
+                    "author": "채용택 / 한가람",
+                    "rating": 9.89,
+                    "imgUrl": "https://~~~"
+                },
+                {
+                    "title": "똑 닮은 딸",
+                    "author": "이담",
+                    "rating": 9.98,
+                    "imgUrl": "https://~~~"
+                }
+            ]
+        }
+    ]
+
+    webtoonDataList.clear()
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+    driver.get("https://comic.naver.com/webtoon")
+    driver.maximize_window()
+    sleep(1)
+
+    categoryList = driver.find_elements(
+        by=By.CSS_SELECTOR,
+        value='#wrap > header > div.SubNavigationBar__snb_wrap--A5gfM > nav > ul > li'
+    )
+
+    for category in categoryList[1:4]:
+        # 내 자신 안에 들어 있는 a 태그
+        categoryLink = category.find_element(by=By.CSS_SELECTOR, value='& > a')
+        categoryLink.click()
+        sleep(0.5)
+
+        webtoonDataOfCategory = {
+            "categoryName": categoryLink.text,
+            "webtoons": []
+        }
+
+    # for i in range(1, 8):
+    #     days = driver.find_elements(
+    #         by=By.CSS_SELECTOR,
+    #         value='#wrap > header > div.SubNavigationBar__snb_wrap--A5gfM > nav > ul > li > a'
+    #     )
+    #     day = days[i]
+    #     driver.execute_script("arguments[0].scrollIntoView(true);", day)
+    #
+    #     daysAndWebtoons = {
+    #         "day": day.text,
+    #         "webtoons": []
+    #     }
+    #     day.click()
+    #     print(daysAndWebtoons)
+
+        liList = driver.find_elements(by=By.CSS_SELECTOR, value='#content > div:nth-child(1) > ul > li')
+        for li in liList:
+            driver.execute_script("arguments[0].scrollIntoView(true);", li)
+            # nth-child 대신 nth-of-type 사용 권장!
+            webtoonTitle = li.find_element(by=By.CSS_SELECTOR, value='& > div > a:nth-of-type(1) > span')
+            titleText = webtoonTitle.text
+            webtoonAuthor = li.find_element(by=By.CSS_SELECTOR, value='& > div .ContentAuthor__author--CTAAP')
+            authorText = webtoonAuthor.text
+            # 구조 상 *:nth-of-type(3) 대신 뒤에서 부터 찾아올 수 있음(바로 앞 요소가 div일 수도 있고, a일 수도 있음)
+            # > div:nth-last-of-type(1)
+            webtoonRating = li.find_element(by=By.CSS_SELECTOR, value='& > div > div:nth-last-of-type(1) > span > span')
+            ratingText = float(webtoonRating.text)
+            webtoonImg = li.find_element(by=By.CSS_SELECTOR, value="& > a > div > img")
+            imgUrlSrc = webtoonImg.get_attribute('src')
+
+            webtoon = {
+                "title": titleText,
+                "author": authorText,
+                "rating": ratingText,
+                "imgUrl": imgUrlSrc
+            }
+            webtoonDataOfCategory["webtoons"].append(webtoon)
+        webtoonDataList.append(webtoonDataOfCategory)
+        #     daysAndWebtoons["webtoons"].append(webtoonData)
+        # webtoonDataList.append(daysAndWebtoons)
+    print(webtoonDataList)
+
+    # save(webtoonDataList)
+    # saveWebtoonDataList(webtoonDataList)
+    saveAuthor(webtoonDataList)
